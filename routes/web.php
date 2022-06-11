@@ -18,5 +18,3 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/api', [RecipeController::class, 'getApiInfos']);
-Route::get('/api/ingredients', [RecipeController::class, 'getAllIngredients']);

@@ -21,9 +21,9 @@ class RecipeController extends Controller
         $url ="https://www.marmiton.org/recettes/recette_couscous-tunisien-traditionnel_94946.aspx";
         $response = Http::get("https://api.spoonacular.com/recipes/extract?url=$url&apiKey=$token&analyze=true&forceExtraction=true&includeTaste=true");
         $jsonResponse = $response->json();
-        $user = User::findOrFail("f3834b53-e4c7-11ec-a01b-a0cec8e34305");
-
+        
         try {        
+            $user = User::findOrFail("f3834b53-e4c7-11ec-a01b-a0cec8e34305");
             //  IMAGE RECETTE
             if($jsonResponse["image"]){
 
