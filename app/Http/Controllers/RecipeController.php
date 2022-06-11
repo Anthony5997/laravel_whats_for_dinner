@@ -212,13 +212,4 @@ class RecipeController extends Controller
         $entre = str_replace($search, $replace, $entre);
         return $entre;
     }
-
-
-    public function getAllIngredients(){
-
-      $allIngredients = Ingredient::all();
-
-      $response = ["total_results" => count($allIngredients), "results" => $allIngredients];
-        return response()->json($response, 200);
-    }
 }
