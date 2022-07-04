@@ -23,8 +23,8 @@ use Illuminate\Support\Facades\Route;
 // });
 
 Route::middleware('auth:sanctum')->group(function () {
-    Route::get('/ingredients', [IngredientController::class, 'getAllIngredients'])-> name('getAllIngredients');
-    Route::get('/ingredients/category', [IngredientCategoryController::class, 'getAllIngredientCategories']);
+    Route::get('/ingredients', [IngredientController::class, 'getAllIngredients'])->name('getAllIngredients');
+    Route::get('/ingredients/category', [IngredientCategoryController::class, 'getAllIngredientCategories'])->name('getAllIngredientCategories');
     Route::get('/ingredients/category/{id}', [IngredientController::class, 'getIngredientsByCategory']);
 });
 
