@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\FridgeController;
 use App\Http\Controllers\IngredientCategoryController;
 use App\Http\Controllers\IngredientController;
 use App\Http\Controllers\RecipeController;
@@ -26,6 +27,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/ingredients', [IngredientController::class, 'getAllIngredients'])->name('getAllIngredients');
     Route::get('/ingredients/category', [IngredientCategoryController::class, 'getAllIngredientCategories'])->name('getAllIngredientCategories');
     Route::get('/ingredients/category/{id}', [IngredientController::class, 'getIngredientsByCategory']);
+    Route::get('/fridge/{id}', [FridgeController::class, 'getFridgeIngredientsByUser']);
+    Route::post('/fridge/addIngredient', [FridgeController::class, 'addIngredientIntoFridge']);
+    // Route::get('/fridge/removeIngredient/{idFridge}{idIngredient}', [FridgeController::class, 'removeIngredientFromFridge']);
 });
 
 Route::get('/record', [RecipeController::class, 'getApiInfos']);

@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Fridge;
+use App\Http\Resources\Fridge as ResourcesFridge;
+use App\Models\Ingredient;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class FridgeController extends Controller
 {
@@ -78,17 +81,61 @@ class FridgeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($idFridge , $idIngredient)
     {
         //
     }
 
 
-    //   public function getFridgeIngredientsByUser(Request $request, $id){
-        
-    //     // $allIngredientsInCategory = Fridge::collection(Fridge::where('user_id', [$id])->get());
+      public function getFridgeIngredientsByUser(Request $request){
 
-    //     $response = ["total_results" => count($allIngredientsInCategory), "results" => $allIngredientsInCategory];
-    //     return response()->json($response, 200);
-    //   }
+        
+        // $userFridge = Fridge::where('user_id', [$id])->get();
+        $userFridge = DB::table('fridges')->join('ingredients', "fridges.ingredient_id", "=" , "ingredients.id")->join('ingredient_categories', "ingredients.ingredient_category_id", "=" , "ingredient_categories.id")->where("fridges.user_id", "=", $request->id)->get();
+
+        $currentUserFridge = [];
+
+        $response = ["total_results" => count($userFridge), "results" => $userFridge];
+        return response()->json($response, 200);
+      }
+
+
+
+
+
+
+      public function removeIngredientFromFridge(Request $request)
+      {
+            $idFridge = $request->idFridge;
+            $idIngredient = $request->idIngredient;
+
+        try {
+            $userFridge = DB::table('fridges')
+            ->where('fridges.id', "=" , $idFridge)
+            ->where('fridges.ingredient_id', "=" , $idIngredient)->delete();
+        } catch (\Throwable $th) {
+
+        }
+        $response = "Suppression réussis";
+        return response()->json($response, 200);
+      }
+
+
+      public function addIngredientIntoFridge(Request $request)
+      {
+
+            $idUser = $request->idUser;
+            $idIngredient = $request->idIngredient;
+            dd($idUser, $idIngredient);
+            try {
+            // $userId = $request->userId;
+                $userFridge = DB::table('fridges')->insert(
+                ['user_id' => $idUser, 'ingredient_id' => $idIngredient]);
+            } catch (\Throwable $th) {
+
+            }
+
+        $response = "Ajout réussis";
+        return response()->json($response, 200);
+      }
 }

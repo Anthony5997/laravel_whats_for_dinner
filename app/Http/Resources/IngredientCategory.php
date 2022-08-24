@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class IngredientCategory extends JsonResource
@@ -15,10 +16,11 @@ class IngredientCategory extends JsonResource
     public function toArray($request)
     {
        // return parent::toArray($request);
+       
        return [
         "id" => $this->id,
-        "category_name" => $this->category_name,
-        "category_image" => $this->category_image,
+        "name" => $this->category_name,
+        "image" => $this->category_image,
     ];
 
     }
