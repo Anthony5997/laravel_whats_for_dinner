@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Fridge;
 use App\Http\Resources\Fridge as ResourcesFridge;
+use App\Http\Resources\IngredientsFridge;
 use App\Models\Ingredient;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class FridgeController extends Controller
@@ -89,14 +91,33 @@ class FridgeController extends Controller
 
       public function getFridgeIngredientsByUser(Request $request){
 
-        
         // $userFridge = Fridge::where('user_id', [$id])->get();
-        $userFridge = DB::table('fridges')->join('ingredients', "fridges.ingredient_id", "=" , "ingredients.id")->join('ingredient_categories', "ingredients.ingredient_category_id", "=" , "ingredient_categories.id")->where("fridges.user_id", "=", $request->id)->get();
 
-        $currentUserFridge = [];
+        $userFridge = DB::select("SELECT ingredient_categories.*, ingredients.*, 
+        ingredients_fridge.id as ingredient_fridge_id,
+        ingredients_fridge.quantity,
+        ingredients_fridge.unit_id,
+        units.unit_name,
+        fridges.id as fridge_id
+        FROM fridges
+        INNER JOIN ingredients_fridge ON ingredients_fridge.fridge_id = fridges.id
+        INNER JOIN ingredients ON ingredients.id = ingredients_fridge.ingredient_id
+        INNER JOIN ingredient_categories ON ingredient_categories.id = ingredients.ingredient_category_id
+        INNER JOIN units ON units.id = ingredients_fridge.unit_id
+        WHERE fridges.user_id = :id", ['id' => Auth::id()] );
 
-        $response = ["total_results" => count($userFridge), "results" => $userFridge];
-        return response()->json($response, 200);
+        $resourceIngredientsFrigde = new IngredientsFridge();
+        $results =[];
+        $fridgeID = intval(str_replace("-", "", $userFridge[0]->fridge_id));
+        // dd($userFridge[0]->fridge_id,$fridgeID);
+        if (count($userFridge) > 0) {
+
+            $results = ["id" => $userFridge[0]->fridge_id, "ingredients" => $resourceIngredientsFrigde->payload($userFridge)];
+        }
+        
+        return response(["total_results" => count($userFridge), "results" => $results], 200);
+        
+    
       }
 
 

@@ -27,13 +27,14 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/ingredients', [IngredientController::class, 'getAllIngredients'])->name('getAllIngredients');
     Route::get('/ingredients/category', [IngredientCategoryController::class, 'getAllIngredientCategories'])->name('getAllIngredientCategories');
     Route::get('/ingredients/category/{id}', [IngredientController::class, 'getIngredientsByCategory']);
-    Route::get('/fridge/{id}', [FridgeController::class, 'getFridgeIngredientsByUser']);
-    Route::post('/fridge/addIngredient', [FridgeController::class, 'addIngredientIntoFridge']);
-    // Route::get('/fridge/removeIngredient/{idFridge}{idIngredient}', [FridgeController::class, 'removeIngredientFromFridge']);
+    Route::get('/fridge', [FridgeController::class, 'getFridgeIngredientsByUser']);
 });
+
 
 Route::get('/record', [RecipeController::class, 'getApiInfos']);
 
 
 Route::post('/auth/login', [AuthController::class, 'loginUser']);
 Route::post('/auth/register', [AuthController::class, 'createUser']);
+// Route::post('/fridge/addIngredient', [FridgeController::class, 'addIngredientIntoFridge']);
+// Route::get('/fridge/removeIngredient/{idFridge}{idIngredient}', [FridgeController::class, 'removeIngredientFromFridge']);
