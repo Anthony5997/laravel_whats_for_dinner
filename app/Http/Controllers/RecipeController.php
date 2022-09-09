@@ -18,7 +18,7 @@ class RecipeController extends Controller
     public function getApiInfos(){
 
         $token = "c2ae3ed4529e43528e15d405c8e2bfa9";
-        $url ="https://www.marmiton.org/recettes/recette_couscous-tunisien-traditionnel_94946.aspx";
+        $url ="https://www.marmiton.org/recettes/recette_gratin-dauphinois_13809.aspx";
         $response = Http::get("https://api.spoonacular.com/recipes/extract?url=$url&apiKey=$token&analyze=true&forceExtraction=true&includeTaste=true");
         $jsonResponse = $response->json();
         

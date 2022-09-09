@@ -91,8 +91,6 @@ class FridgeController extends Controller
 
       public function getFridgeIngredientsByUser(Request $request){
 
-        // $userFridge = Fridge::where('user_id', [$id])->get();
-
         $userFridge = DB::select("SELECT ingredient_categories.*, ingredients.*, 
         ingredients_fridge.id as ingredient_fridge_id,
         ingredients_fridge.quantity,
@@ -108,55 +106,73 @@ class FridgeController extends Controller
 
         $resourceIngredientsFrigde = new IngredientsFridge();
         $results =[];
-        $fridgeID = intval(str_replace("-", "", $userFridge[0]->fridge_id));
-        // dd($userFridge[0]->fridge_id,$fridgeID);
         if (count($userFridge) > 0) {
 
             $results = ["id" => $userFridge[0]->fridge_id, "ingredients" => $resourceIngredientsFrigde->payload($userFridge)];
         }
-        
         return response(["total_results" => count($userFridge), "results" => $results], 200);
-        
-    
       }
-
-
-
-
-
-
-      public function removeIngredientFromFridge(Request $request)
-      {
-            $idFridge = $request->idFridge;
-            $idIngredient = $request->idIngredient;
-
-        try {
-            $userFridge = DB::table('fridges')
-            ->where('fridges.id', "=" , $idFridge)
-            ->where('fridges.ingredient_id', "=" , $idIngredient)->delete();
-        } catch (\Throwable $th) {
-
-        }
-        $response = "Suppression réussis";
-        return response()->json($response, 200);
-      }
-
-
+     
+      
       public function addIngredientIntoFridge(Request $request)
       {
+        $fridgeId = $request->fridgeId;
+        $ingredientId = $request->ingredientId;
+        $quantity = $request->quantity;
+        $unit = $request->unit;
 
-            $idUser = $request->idUser;
-            $idIngredient = $request->idIngredient;
-            dd($idUser, $idIngredient);
+        $checkIngredient = DB::table('ingredients_fridge')
+        ->where('ingredients_fridge.fridge_id', $fridgeId)
+        ->where('ingredients_fridge.ingredient_id' , $ingredientId)
+        ->first();
+        $response = "En attente";
+        
+        if($checkIngredient == null){
             try {
-            // $userId = $request->userId;
-                $userFridge = DB::table('fridges')->insert(
-                ['user_id' => $idUser, 'ingredient_id' => $idIngredient]);
+                DB::table('ingredients_fridge')->insert(
+                ['fridge_id' => $fridgeId, 'ingredient_id' => $ingredientId, "quantity" => $quantity, "unit_id" => $unit]);
             } catch (\Throwable $th) {
-
+                
             }
-
-        $response = "Ajout réussis";
+            $response = "Ajout réussis";
+            return response()->json($response, 200);
+            
+        }else{
+            if($unit == $checkIngredient->unit_id){
+                try {
+                    DB::table('ingredients_fridge')
+                    ->where('ingredients_fridge.fridge_id', $fridgeId)
+                    ->where('ingredients_fridge.ingredient_id' , $ingredientId)
+                    ->update(['quantity' => $checkIngredient->quantity += $quantity]);
+                $response = "Nouvelle quantitée ajouter";
+                } catch (\Throwable $th) {
+                $response = "Echec d'ajout d'une nouvelle quantitée";
+                }
+            }else{
+                $response = "Echec de l'ajout. L'unitée de mesure séléctionnée n'est pas la même que celle contenu dans votre fridgo.";
+            }
+                
+        }
         return response()->json($response, 200);
-      }
-}
+    }
+
+
+        public function deleteIngredientFromFridge(Request $request)
+        {
+            
+            $idFridge = $request->fridgeId;
+            $idIngredient = $request->ingredientId;
+                        
+          try {
+             $test = DB::table('ingredients_fridge')
+              ->where('ingredients_fridge.fridge_id', $idFridge)
+              ->where('ingredients_fridge.ingredient_id' , $idIngredient)
+              ->delete();
+          } catch (\Throwable $th) {
+    
+          }
+          $response = "Suppression réussis";
+          return response()->json($response, 200);
+        }
+    }
+    

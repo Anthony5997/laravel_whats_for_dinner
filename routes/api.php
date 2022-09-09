@@ -5,6 +5,7 @@ use App\Http\Controllers\FridgeController;
 use App\Http\Controllers\IngredientCategoryController;
 use App\Http\Controllers\IngredientController;
 use App\Http\Controllers\RecipeController;
+use App\Http\Controllers\UnitsController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -28,13 +29,14 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/ingredients/category', [IngredientCategoryController::class, 'getAllIngredientCategories'])->name('getAllIngredientCategories');
     Route::get('/ingredients/category/{id}', [IngredientController::class, 'getIngredientsByCategory']);
     Route::get('/fridge', [FridgeController::class, 'getFridgeIngredientsByUser']);
+    Route::post('/fridge/addIngredient', [FridgeController::class, 'addIngredientIntoFridge']);
+    Route::post('/fridge/deleteIngredient', [FridgeController::class, 'deleteIngredientFromFridge']);
 });
 
 
 Route::get('/record', [RecipeController::class, 'getApiInfos']);
+Route::get('/units', [UnitsController::class, 'getAllUnits']);
 
 
 Route::post('/auth/login', [AuthController::class, 'loginUser']);
 Route::post('/auth/register', [AuthController::class, 'createUser']);
-// Route::post('/fridge/addIngredient', [FridgeController::class, 'addIngredientIntoFridge']);
-// Route::get('/fridge/removeIngredient/{idFridge}{idIngredient}', [FridgeController::class, 'removeIngredientFromFridge']);

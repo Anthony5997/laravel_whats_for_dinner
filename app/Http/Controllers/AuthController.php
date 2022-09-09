@@ -28,10 +28,20 @@ class AuthController extends Controller
                 'password' => 'required'
             ]);
 
+            $user = User::where('nickname', '=', $request->nickname)->first();
+
+            if($user){
+                return response()->json([
+                    'status' => false,
+                    'message' => "Ce nom d'utilisateur est déjà utilisé.",
+                    'errors' => $validateUser->errors()
+                ], 401);
+            }
+
             if($validateUser->fails()){
                 return response()->json([
                     'status' => false,
-                    'message' => 'validation error',
+                    'message' => 'Erreur de validation.',
                     'errors' => $validateUser->errors()
                 ], 401);
             }
@@ -74,7 +84,7 @@ class AuthController extends Controller
             if($validateUser->fails()){
                 return response()->json([
                     'status' => false,
-                    'message' => 'validation error',
+                    'message' => 'Erreur de validation.',
                     'errors' => $validateUser->errors()
                 ], 401);
             }
@@ -82,7 +92,7 @@ class AuthController extends Controller
             if(!Auth::attempt($request->only(['email', 'password']))){
                 return response()->json([
                     'status' => false,
-                    'message' => 'Email & Password does not match with our record.',
+                    'message' => "L'email où le mot de passe ne correspondent pas.",
                 ], 401);
             }
 
@@ -90,7 +100,7 @@ class AuthController extends Controller
 
             return response()->json([
                 'status' => true,
-                'message' => 'User Logged In Successfully',
+                'message' => 'Authentification réussie.',
                 'token' => $user->createToken("API TOKEN")->plainTextToken,
                 'user' => $user,
             ], 200);
