@@ -212,4 +212,6 @@ class RecipeController extends Controller
         $entre = str_replace($search, $replace, $entre);
         return $entre;
     }
+
+
 }
