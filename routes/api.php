@@ -5,7 +5,7 @@ use App\Http\Controllers\FridgeController;
 use App\Http\Controllers\IngredientCategoryController;
 use App\Http\Controllers\IngredientController;
 use App\Http\Controllers\RecipeController;
-use App\Http\Controllers\RecipeList;
+use App\Http\Controllers\RecipeListController;
 use App\Http\Controllers\UnitsController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -29,7 +29,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/ingredients', [IngredientController::class, 'getAllIngredients'])->name('getAllIngredients');
     Route::get('/ingredients/category', [IngredientCategoryController::class, 'getAllIngredientCategories'])->name('getAllIngredientCategories');
     Route::get('/ingredients/category/{id}', [IngredientController::class, 'getIngredientsByCategory']);
-    Route::get('/recipe/potentialRecipes', [RecipeList::class, 'getPotentialRecipes']);
+    Route::get('/recipe/potentialRecipes', [RecipeListController::class, 'getPotentialRecipes']);
     Route::get('/fridge', [FridgeController::class, 'getFridgeIngredientsByUser']);
     Route::post('/fridge/addIngredient', [FridgeController::class, 'addIngredientIntoFridge']);
     Route::post('/fridge/deleteIngredient', [FridgeController::class, 'deleteIngredientFromFridge']);
