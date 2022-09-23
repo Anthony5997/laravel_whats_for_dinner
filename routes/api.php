@@ -27,9 +27,12 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/ingredients', [IngredientController::class, 'getAllIngredients'])->name('getAllIngredients');
+    Route::post('/ingredients/search', [IngredientController::class, 'findIngredients']);
     Route::get('/ingredients/category', [IngredientCategoryController::class, 'getAllIngredientCategories'])->name('getAllIngredientCategories');
     Route::get('/ingredients/category/{id}', [IngredientController::class, 'getIngredientsByCategory']);
+    Route::post('/ingredients/category/search', [IngredientCategoryController::class, 'findCategory']);
     Route::get('/recipe/potentialRecipes', [RecipeListController::class, 'getPotentialRecipes']);
+    Route::post('/recipe/search', [RecipeListController::class, 'findSpecificRecipes']);
     Route::get('/fridge', [FridgeController::class, 'getFridgeIngredientsByUser']);
     Route::post('/fridge/addIngredient', [FridgeController::class, 'addIngredientIntoFridge']);
     Route::post('/fridge/deleteIngredient', [FridgeController::class, 'deleteIngredientFromFridge']);

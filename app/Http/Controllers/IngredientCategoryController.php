@@ -73,6 +73,18 @@ class IngredientCategoryController extends Controller
         return response()->json($response, 200);
     }
 
+    public function findCategory(Request $request){
+
+        $userInput = $request->input;
+        
+        $categorySearch = ResourcesIngredientCategory::collection(IngredientCategory::where('category_name', 'like', '%' . $userInput . '%')->get());
+
+      $response = ["total_results" => count($categorySearch), "results" => $categorySearch];
+      return response()->json($response, 200);
+  }
+
+
+
 
 
 }

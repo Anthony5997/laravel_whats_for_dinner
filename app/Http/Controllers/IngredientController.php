@@ -80,4 +80,15 @@ class IngredientController extends Controller
         return response()->json($response, 200);
       }
 
+      public function findIngredients(Request $request){
+
+          $ingredientCategoryId= $request->id;
+          $userInput = $request->input;
+          
+          $ingredientsSearch = ResourcesIngredient::collection(Ingredient::where('ingredient_category_id', [$ingredientCategoryId])->where('name', 'like', $userInput . '%')->get());
+
+        $response = ["total_results" => count($ingredientsSearch), "results" => $ingredientsSearch];
+        return response()->json($response, 200);
+    }
+
 }
