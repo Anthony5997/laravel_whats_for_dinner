@@ -31,6 +31,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/ingredients/category', [IngredientCategoryController::class, 'getAllIngredientCategories'])->name('getAllIngredientCategories');
     Route::get('/ingredients/category/{id}', [IngredientController::class, 'getIngredientsByCategory']);
     Route::post('/ingredients/category/search', [IngredientCategoryController::class, 'findCategory']);
+    Route::post('/recipe/recipeDetail', [RecipeListController::class, 'getRecipeDetail']);
     Route::get('/recipe/potentialRecipes', [RecipeListController::class, 'getPotentialRecipes']);
     Route::post('/recipe/search', [RecipeListController::class, 'findSpecificRecipes']);
     Route::get('/fridge', [FridgeController::class, 'getFridgeIngredientsByUser']);
@@ -45,3 +46,5 @@ Route::get('/units', [UnitsController::class, 'getAllUnits']);
 
 Route::post('/auth/login', [AuthController::class, 'loginUser']);
 Route::post('/auth/register', [AuthController::class, 'createUser']);
+
+

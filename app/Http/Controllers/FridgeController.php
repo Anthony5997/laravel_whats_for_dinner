@@ -89,7 +89,7 @@ class FridgeController extends Controller
     }
 
 
-      public function getFridgeIngredientsByUser(Request $request){
+      public function getFridgeIngredientsByUser(){
 
         $userFridge = DB::select("SELECT ingredient_categories.*, ingredients.*, 
         ingredients_fridge.id as ingredient_fridge_id,
