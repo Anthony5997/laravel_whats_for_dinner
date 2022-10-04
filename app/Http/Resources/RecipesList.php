@@ -14,16 +14,17 @@ class RecipesList
     public function payload($data)
     {
 
-
+        
         $fridgeController = new FridgeController();
         $userFridge = $fridgeController->getFridgeIngredientsByUser();
+        
         $dataDecode = json_decode($userFridge->content());
-
+        
         $fridgeIngredientsId = [];
         foreach ($dataDecode->results->ingredients as $ingredient) {
             array_push($fridgeIngredientsId, $ingredient->id);
         }
-      
+    
         $response = [];
    
 
@@ -70,6 +71,7 @@ class RecipesList
 
             $pertinence = number_format(round(((($totalRecipeIngredient - count($missingIngredient)) * 100) / $totalRecipeIngredient )));
 
+            
             foreach($recipeSteps as $steps){
 
                 array_push($arrayRecipeSteps, [

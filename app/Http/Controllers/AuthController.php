@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Fridge;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -52,11 +53,14 @@ class AuthController extends Controller
                 'password' => Hash::make($request->password)
             ]);
 
+            $fridge = Fridge::where('user_id', $user->id)->first();
+
             return response()->json([
                 'status' => true,
                 'message' => 'User Created Successfully',
                 'token' => $user->createToken("API TOKEN")->plainTextToken,
-                'user' => $user
+                'user' => $user,
+                'fridge' => $fridge,
             ], 200);
 
         } catch (\Throwable $th) {
@@ -97,12 +101,14 @@ class AuthController extends Controller
             }
 
             $user = User::where('email', $request->email)->first();
+            $fridge = Fridge::where('user_id', $user->id)->first();
 
             return response()->json([
                 'status' => true,
                 'message' => 'Authentification réussie.',
                 'token' => $user->createToken("API TOKEN")->plainTextToken,
                 'user' => $user,
+                'fridge' => $fridge,
             ], 200);
 
         } catch (\Throwable $th) {

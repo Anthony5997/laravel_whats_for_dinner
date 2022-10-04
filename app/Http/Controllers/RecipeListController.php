@@ -114,6 +114,7 @@ class RecipeListController extends Controller
 
         $allRecipes = Recipe::all();
         $recipeComplete = [];
+
         foreach ($allRecipes as $recipe) {
 
             $allIngredientRecipe = DB::select(
@@ -132,6 +133,7 @@ class RecipeListController extends Controller
         }
         
         $resourceRecipesList = new RecipesList();
+        // dd($resourceRecipesList->payload($recipeComplete));
 
         $response = ["total_results" => count($recipeComplete), "results" => $resourceRecipesList->payload($recipeComplete)];
         return response()->json($response, 200);

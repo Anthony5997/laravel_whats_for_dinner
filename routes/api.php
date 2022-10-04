@@ -39,12 +39,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/fridge/deleteIngredient', [FridgeController::class, 'deleteIngredientFromFridge']);
 });
 
-
 Route::get('/record', [RecipeController::class, 'getApiInfos']);
 Route::get('/units', [UnitsController::class, 'getAllUnits']);
 
 
 Route::post('/auth/login', [AuthController::class, 'loginUser']);
 Route::post('/auth/register', [AuthController::class, 'createUser']);
-
-
