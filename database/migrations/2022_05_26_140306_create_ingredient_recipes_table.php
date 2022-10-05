@@ -16,6 +16,7 @@ class CreateIngredientRecipesTable extends Migration
     public function up()
     {
         Schema::create('ingredient_recipes', function (Blueprint $table) {        
+            $table->uuid('id')->primary();
             $table->foreignIdFor(Recipe::class)->constrained()->onDelete('cascade');
             $table->foreignIdFor(Ingredient::class)->constrained();
             $table->string('integration_name');

@@ -19,10 +19,13 @@ class RecipesList
         $userFridge = $fridgeController->getFridgeIngredientsByUser();
         
         $dataDecode = json_decode($userFridge->content());
-        
+        $dataDecode = json_decode($userFridge->content());
         $fridgeIngredientsId = [];
-        foreach ($dataDecode->results->ingredients as $ingredient) {
-            array_push($fridgeIngredientsId, $ingredient->id);
+        if(isset($dataDecode->results->ingredients)){
+
+            foreach ($dataDecode->results->ingredients as $ingredient) {
+                array_push($fridgeIngredientsId, $ingredient->id);
+            }
         }
     
         $response = [];

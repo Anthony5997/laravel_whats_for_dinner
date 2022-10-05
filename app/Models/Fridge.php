@@ -11,7 +11,6 @@ class Fridge extends Model
     use HasFactory, Uuids;
 
     protected $fillable = [
-        'users_id',
-        'ingredients_id',
+        'user_id',
     ];
 }

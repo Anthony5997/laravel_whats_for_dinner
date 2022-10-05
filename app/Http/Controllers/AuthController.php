@@ -53,7 +53,11 @@ class AuthController extends Controller
                 'password' => Hash::make($request->password)
             ]);
 
-            $fridge = Fridge::where('user_id', $user->id)->first();
+            
+            $fridge = Fridge::create([
+                'user_id' => $user->id,
+            ]);
+            
 
             return response()->json([
                 'status' => true,
