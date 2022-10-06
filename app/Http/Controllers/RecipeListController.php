@@ -134,8 +134,13 @@ class RecipeListController extends Controller
         
         $resourceRecipesList = new RecipesList();
         // dd($resourceRecipesList->payload($recipeComplete));
+        
+        $unsortedRecipes = $resourceRecipesList->payload($recipeComplete);
+        $pertinence = array_column($unsortedRecipes, 'pertinence');
+        array_multisort($pertinence, SORT_DESC, $unsortedRecipes);
+        $sortedRecipes =  $unsortedRecipes;
 
-        $response = ["total_results" => count($recipeComplete), "results" => $resourceRecipesList->payload($recipeComplete)];
+        $response = ["total_results" => count($recipeComplete), "results" => $sortedRecipes];
         return response()->json($response, 200);
     }
 
@@ -165,7 +170,12 @@ class RecipeListController extends Controller
             
             $resourceRecipesList = new RecipesList();
 
-        $response = ["total_results" => count($recipeComplete), "results" => $resourceRecipesList->payload($recipeComplete)];
+            $unsortedRecipes = $resourceRecipesList->payload($recipeComplete);
+            $pertinence = array_column($unsortedRecipes, 'pertinence');
+            array_multisort($pertinence, SORT_DESC, $unsortedRecipes);
+            $sortedRecipes =  $unsortedRecipes;
+
+        $response = ["total_results" => count($recipeComplete), "results" => $sortedRecipes];
         return response()->json($response, 200);
     }
 
