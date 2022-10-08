@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\FridgeController;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Auth;
@@ -14,7 +15,7 @@ class RecipesList
     public function payload($data)
     {
 
-        
+        $favoriteController = new FavoriteController();
         $fridgeController = new FridgeController();
         $userFridge = $fridgeController->getFridgeIngredientsByUser();
         
@@ -37,7 +38,8 @@ class RecipesList
             $arrayIngredients = [];
             $arrayRecipeSteps = [];
             $pertinence = 0;
-            $favorite = false;
+            
+            $favorite = $favoriteController->getFavorite($data[$i]['recipe']["infos"]->id);
             $missingIngredient = [];
 
 
@@ -97,6 +99,7 @@ class RecipesList
                 'gluten_free' => boolval($recipeInfo->gluten_free),
                 'dairy_free' => boolval($recipeInfo->dairy_free),
                 'pertinence' => round($pertinence),
+                'favorite' => $favorite == null ? false : true,
                 "ingredients_list" => $arrayIngredients,
                 "ingredients_missing_list" => $missingIngredient,
                 "recipe_steps" => $arrayRecipeSteps,

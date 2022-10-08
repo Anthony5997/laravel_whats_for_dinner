@@ -164,7 +164,7 @@ class FridgeController extends Controller
             $idIngredient = $request->ingredientId;
                         
           try {
-             $test = DB::table('ingredients_fridge')
+             DB::table('ingredients_fridge')
               ->where('ingredients_fridge.fridge_id', $idFridge)
               ->where('ingredients_fridge.ingredient_id' , $idIngredient)
               ->delete();
