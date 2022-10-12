@@ -174,5 +174,20 @@ class FridgeController extends Controller
           $response = "Suppression réussis";
           return response()->json($response, 200);
         }
+
+
+        public function deleteAllIngredientsFromFridge(Request $request)
+        {
+            $idFridge = $request->fridgeId;
+          try {
+             DB::table('ingredients_fridge')
+              ->where('ingredients_fridge.fridge_id', $idFridge)
+              ->truncate();
+          } catch (\Throwable $th) {
+    
+          }
+          $response = "Suppression réussis";
+          return response()->json($response, 200);
+        }
     }
     

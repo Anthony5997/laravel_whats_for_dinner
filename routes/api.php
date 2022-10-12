@@ -38,6 +38,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/fridge', [FridgeController::class, 'getFridgeIngredientsByUser']);
     Route::post('/fridge/addIngredient', [FridgeController::class, 'addIngredientIntoFridge']);
     Route::post('/fridge/deleteIngredient', [FridgeController::class, 'deleteIngredientFromFridge']);
+    Route::post('/fridge/deleteAllIngredients', [FridgeController::class, 'deleteAllIngredientsFromFridge']);
     Route::post('/favorite/check', [FavoriteController::class, 'checkFavorite']);
     Route::get('/favorite/favoriteRecipe', [FavoriteController::class, 'getFavoriteRecipe']);
 });
