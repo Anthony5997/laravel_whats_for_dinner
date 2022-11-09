@@ -157,6 +157,48 @@ class FridgeController extends Controller
     }
 
 
+
+    public function updateIngredientIntoFridge(Request $request)
+    {
+      $fridgeId = $request->fridgeId;
+      $ingredientId = $request->ingredientId;
+      $quantity = $request->quantity;
+      $unit = $request->unit;
+
+      $checkIngredient = DB::table('ingredients_fridge')
+      ->where('ingredients_fridge.fridge_id', $fridgeId)
+      ->where('ingredients_fridge.ingredient_id' , $ingredientId)
+      ->first();
+      $response = "En attente";
+      
+        if($unit == $checkIngredient->unit_id){
+              try {
+                  DB::table('ingredients_fridge')
+                  ->where('ingredients_fridge.fridge_id', $fridgeId)
+                  ->where('ingredients_fridge.ingredient_id' , $ingredientId)
+                  ->update(['quantity' => $checkIngredient->quantity = $quantity]);
+              $response = "Quantitée modifié";
+              } catch (\Throwable $th) {
+              $response = "Echec de modification de la quantitée";
+              }
+          }else{
+            // dd($checkIngredient->quantity, $checkIngredient->unit_id, $quantity, $unit);
+            try {
+                DB::table('ingredients_fridge')
+                ->where('ingredients_fridge.fridge_id', $fridgeId)
+                ->where('ingredients_fridge.ingredient_id' , $ingredientId)
+                ->update(['quantity' => $checkIngredient->quantity = $quantity, "unit_id" => $checkIngredient->unit_id = $unit]);
+            $response = "Quantitée et unitée modifié";
+            } catch (\Throwable $th) {
+            $response = "Echec de modification de la quantitée et de l'unitée";
+            }
+          }
+              
+    
+      return response()->json($response, 200);
+  }
+
+
         public function deleteIngredientFromFridge(Request $request)
         {
             
