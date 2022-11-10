@@ -35,6 +35,13 @@ return [
             'root' => storage_path('app'),
         ],
 
+        'admin' => [
+            'driver' => 'local',
+            'root' => storage_path('app'),
+            'url' => env('URL').'/public',
+            'visibility' => 'public',
+        ],
+
         'public' => [
             'driver' => 'local',
             'root' => storage_path('app/public'),
@@ -68,6 +75,7 @@ return [
 
     'links' => [
         public_path('storage') => storage_path('app/public'),
+        public_path('image') => "http://laravel_whats_for_dinner.test",
     ],
 
 ];

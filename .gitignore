@@ -1,7 +1,7 @@
 /node_modules
 /public/hot
-/public/assets/ingredients/*
-/public/assets/recipe/*
+/public/images/ingredients/*
+/public/images/recipe/*
 /public/storage
 /storage/*.key
 /vendor
@@ -15,3 +15,6 @@ npm-debug.log
 yarn-error.log
 /.idea
 /.vscode
+resources/lang/*
+!resources/lang/fr
+

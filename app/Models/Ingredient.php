@@ -9,9 +9,13 @@ class Ingredient extends Model
 {
     use HasFactory;
 
+    public function ingredient(){
+        return $this->hasOne(IngredientCategory::class, 'id', 'ingredient_category_id');
+    }
+
     protected $fillable = [
         'name',
         'image',
-        'ingredient_categories_id',
+        'ingredient_category_id',
     ];
 }

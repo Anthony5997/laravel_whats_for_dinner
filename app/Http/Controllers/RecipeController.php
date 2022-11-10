@@ -33,11 +33,11 @@ class RecipeController extends Controller
                 $recipeImageName = $this->formatStringWithNoAccents($jsonResponse["title"]);
                 $recipeImageName = utf8_encode(strtolower(str_replace([" ", "'", ":", "@","\""], "", $recipeImageName)));
                 if(strlen($recipeImageName) >= 15){
-                    $recipeImageName = substr($recipeImageName, 0, 15). ".jpeg";
+                    $recipeImageName = substr($recipeImageName, 0, strlen($recipeImageName)). ".jpeg";
                 }else{
                     $recipeImageName = $recipeImageName. ".jpeg"; 
                 }
-                file_put_contents(public_path("assets\\recipe\\$recipeImageName"), $image);
+                file_put_contents(public_path("images\\recipe\\$recipeImageName"), $image);
                 echo "<p>- Image Recette ajouté  </p>";
 
             }else{
@@ -52,7 +52,7 @@ class RecipeController extends Controller
                 $recipe = new Recipe();
                 $recipe->title = $jsonResponse["title"];
                 $recipe->summary = $jsonResponse["title"];
-                $recipe->image = $recipeImageName;
+                $recipe->image = "images/recipe/".$recipeImageName;
                 $recipe->ready_in_minutes = $jsonResponse["readyInMinutes"];
                 $recipe->servings = $jsonResponse["servings"];
                 $recipe->preparation_minutes = $jsonResponse["preparationMinutes"];
@@ -115,7 +115,7 @@ class RecipeController extends Controller
                             $ingredientImageName = $this->formatStringWithNoAccents($ingredientImageName);
                         }
 
-                        file_put_contents(public_path("assets\ingredients\\$ingredientImageName"), $image);
+                        file_put_contents(public_path("images\ingredients\\$ingredientImageName"), $image);
                         
                         echo "<p>- Image Ingrédient '$ingredientImageName' ajouté  </p>";
                     }else{
@@ -170,7 +170,7 @@ class RecipeController extends Controller
 
                     $ingredient = new Ingredient();
                     $ingredient->name = $ingredientName;
-                    $ingredient->image = $ingredientImageName;
+                    $ingredient->image = 'images/ingredients/'.$ingredientImageName;
                     $ingredient->ingredient_category_id = $ingredientCategorie;
         
                     $ingredient->save();
