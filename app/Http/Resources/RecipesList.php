@@ -4,6 +4,7 @@ namespace App\Http\Resources;
 
 use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\FridgeController;
+use App\Http\Controllers\ReviewsController;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -17,6 +18,7 @@ class RecipesList
 
         $favoriteController = new FavoriteController();
         $fridgeController = new FridgeController();
+        $reviewController = new ReviewsController();
         $userFridge = $fridgeController->getFridgeIngredientsByUser();
         
         $dataDecode = json_decode($userFridge->content());
@@ -37,9 +39,14 @@ class RecipesList
             $arrayInfos = [];
             $arrayIngredients = [];
             $arrayRecipeSteps = [];
+            $arrayReviews = [];
             $pertinence = 0;
             
+            $allReviews = $reviewController->getAllRecipeReviews($data[$i]['recipe']["infos"]->id);
             $favorite = $favoriteController->getFavorite($data[$i]['recipe']["infos"]->id);
+            $review = $reviewController->getReview($data[$i]['recipe']["infos"]->id);
+            $endDateIsNew = strtotime($data[$i]['recipe']["infos"]->created_at)  + 1209600;
+            $isNew = $endDateIsNew < strtotime(now());
             $missingIngredient = [];
 
 
@@ -47,6 +54,7 @@ class RecipesList
             $recipeIngredients = $data[$i]['recipe']["ingredients"];
             $recipeSteps = $data[$i]['recipe']["steps"];
             $totalRecipeIngredient = count($recipeIngredients);
+            
 
             
             foreach($recipeIngredients as $ingredient){
@@ -85,6 +93,22 @@ class RecipesList
                 ]);
             }
 
+            if (count($allReviews) > 0) {
+                $globalRating = 0;
+                foreach($allReviews as $review){
+                    $globalRating += $review->rating;
+                    array_push($arrayReviews, [
+                        "rating" => strval($review->rating),
+                        "author" => strval($review->nickname),
+                        "created_at" => $review->created_at,
+                    ]);
+                }
+                $globalRating = $globalRating/count($allReviews);
+    
+            }else{
+                $globalRating = null;
+            }
+
             array_push($response, [
                 'id' => $recipeInfo->id,
                 'title' => $recipeInfo->title ,
@@ -100,6 +124,10 @@ class RecipesList
                 'dairy_free' => boolval($recipeInfo->dairy_free),
                 'pertinence' => round($pertinence),
                 'favorite' => $favorite == null ? false : true,
+                'user_rating' => $review == null ? null : floatval($review->rating),
+                'global_rating' => $globalRating == 0 ? null : floatval($globalRating),
+                'is_new' => $isNew,
+                'reviews_list' => $arrayReviews,
                 "ingredients_list" => $arrayIngredients,
                 "ingredients_missing_list" => $missingIngredient,
                 "recipe_steps" => $arrayRecipeSteps,
@@ -107,7 +135,6 @@ class RecipesList
                 'updated_at' => $recipeInfo->updated_at == null ? 0 : $recipeInfo->updated_at,
             ]);
         } 
-
         return $response;
     }
 }

@@ -30,6 +30,8 @@ class Recipe extends Model
         'glute_free',
         'dairy_free',
         'user_id',
+        'global_rating',
+        'is_new',
     ];
 
 

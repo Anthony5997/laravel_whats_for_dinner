@@ -106,6 +106,8 @@ class FridgeController extends Controller
 
         $resourceIngredientsFrigde = new IngredientsFridge();
         $results =[];
+
+        
         if (count($userFridge) > 0) {
 
             $results = ["id" => $userFridge[0]->fridge_id, "ingredients" => $resourceIngredientsFrigde->payload($userFridge)];

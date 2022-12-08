@@ -131,7 +131,6 @@ class RecipeListController extends Controller
             $allStep = DB::select("SELECT `step_number`, `step` FROM `recipe_steps` WHERE `recipe_id` = :id ORDER BY `step_number` ASC", ["id" => $recipe->id]);
             array_push($recipeComplete, ["recipe" => ["infos" => $recipe, "ingredients" => $allIngredientRecipe, "steps" => $allStep]]);
         }
-        
         $resourceRecipesList = new RecipesList();
         // dd($resourceRecipesList->payload($recipeComplete));
         
@@ -208,14 +207,5 @@ class RecipeListController extends Controller
         $resourceRecipesList = new RecipesList();
         $response = ["total_results" => count($recipeComplete), "results" => $resourceRecipesList->payload($recipeComplete, [])];
         return response()->json($response, 200);
-      }
-
-    // public function addRecipeToFavorie(Request $request){
-
-    //     $userInput = $request->input;
-
-    //     $response = ["total_results" => [], "results" => []];
-    //     return response()->json($response, 200);
-    // }
-    
+      }    
 }
