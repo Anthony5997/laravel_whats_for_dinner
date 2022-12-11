@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Repositories\FavoriteRepository;
+use App\Http\Repositories\FridgeRepository;
+use App\Http\Repositories\RecipeListRepository;
 use App\Http\Resources\RecipesList;
 use App\Models\Favorite;
 use App\Models\Recipe;
@@ -22,67 +25,12 @@ class FavoriteController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Favorite  $favorite
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Favorite $favorite)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Favorite  $favorite
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Favorite $favorite)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Favorite  $favorite
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Favorite $favorite)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Favorite  $favorite
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Favorite $favorite)
     {
         //
     }
@@ -94,10 +42,11 @@ class FavoriteController extends Controller
   
     }
 
-    public function getFavoriteRecipe()
+    public function getFavoriteRecipe(RecipeListRepository $recipeListRepository, FridgeRepository $fridgeRepository)
     {
 
         $favoritesRecipes = Favorite::where('user_id', Auth::id())->get();
+        $userFridge = $fridgeRepository->getUserFridge();
 
         $recipeComplete = [];        
 
@@ -105,72 +54,38 @@ class FavoriteController extends Controller
             
             $recipesFound = Recipe::where('id', $recipe->recipe_id)->first();
 
-            $allIngredientRecipe = DB::select(
-                "SELECT 
-                ingredient_id,
-                integration_name, 
-                quantity,
-                unit, 
-                ingredients.image,
-                ingredients.ingredient_category_id
-                FROM ingredient_recipes
-                INNER JOIN ingredients ON ingredients.id = ingredient_recipes.ingredient_id
-                WHERE recipe_id = :id", ["id" =>  $recipesFound->id]);
-            $allStep = DB::select("SELECT `step_number`, `step` FROM `recipe_steps` WHERE `recipe_id` = :id ORDER BY `step_number` ASC", ["id" => $recipesFound->id]);
+            $allIngredientRecipe = $recipeListRepository->getAllIngredientsRecipe($recipesFound);
+            $allStep = $recipeListRepository->getAllRecipeSteps($recipesFound);
             array_push($recipeComplete, ["recipe" => ["infos" => $recipesFound, "ingredients" => $allIngredientRecipe, "steps" => $allStep]]);
-            } 
+        } 
             
-            $resourceRecipesList = new RecipesList();
-
-            $unsortedRecipes = $resourceRecipesList->payload($recipeComplete);
-            $pertinence = array_column($unsortedRecipes, 'pertinence');
-            array_multisort($pertinence, SORT_DESC, $unsortedRecipes);
-            $sortedRecipes =  $unsortedRecipes;
+        $sortedRecipes =  $this->sortRecipesByPertinence($recipeComplete, $userFridge);
 
         $response = ["total_results" => count($recipeComplete), "results" => $sortedRecipes];
         return response()->json($response, 200);
                   
     }
 
-    public function checkFavorite(Request $request)
+    public function checkFavorite(Request $request, FavoriteRepository $favoriteRepository)
     {
         $recipeId = $request->recipeId;
-
         $checkFavorite = Favorite::where('user_id', Auth::id())->where("recipe_id", $recipeId)->first();
-
         
         if ($checkFavorite) {
+            $response = $favoriteRepository->deleteRecipeFromFavorite($recipeId);
+        }else {
+            $response = $favoriteRepository->addRecipeToFavorite($recipeId);
+        }
+        return response()->json($response, 200);
+    }
+
+    public function sortRecipesByPertinence($recipeComplete, $userFridge){
         
-                DB::table('favorites')->where('favorites.user_id', Auth::id())
-                ->where('favorites.recipe_id' , $recipeId)
-                ->delete();
-                $response = "Retrait réussis";
-            }else {
-                DB::table('favorites')->insert(
-                    ['user_id' => Auth::id(),  "recipe_id" => $recipeId]);
-                    $response = "Ajout réussis";
-            }
-            
-            return response()->json($response, 200);
-  
-    }
+        $resourceRecipesList = new RecipesList();
 
-    public function removeFromFavorite(Request $request)
-    {
-        $recipeId = $request->recipeId;
-
-        $checkFavorite = Favorite::where('user_id', Auth::id())->where("recipe_id", $recipeId)->first();
-        $response = "Déjà en favoris";
-
-        if ($checkFavorite) {
-
-            DB::table('favorites')->insert(
-                ['user_id' => Auth::id(),  "recipe_id" => $recipeId]);
-                $response = "Ajout réussis";
-            }
-            
-            return response()->json($response, 200);
-  
-    }
-
+        $unsortedRecipes = $resourceRecipesList->payload($recipeComplete, $userFridge);
+        $pertinence = array_column($unsortedRecipes, 'pertinence');
+        array_multisort($pertinence, SORT_DESC, $unsortedRecipes);
+        return $unsortedRecipes;
+      }
 }

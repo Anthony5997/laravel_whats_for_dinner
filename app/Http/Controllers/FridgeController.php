@@ -2,12 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Fridge;
-use App\Http\Resources\Fridge as ResourcesFridge;
 use App\Http\Resources\IngredientsFridge;
-use App\Models\Ingredient;
+use App\Http\Repositories\FridgeRepository;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class FridgeController extends Controller
@@ -18,16 +15,6 @@ class FridgeController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
     {
         //
     }
@@ -54,184 +41,99 @@ class FridgeController extends Controller
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
+    public function getFridgeIngredientsByUser(FridgeRepository $fridgeRepository){
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($idFridge , $idIngredient)
-    {
-        //
-    }
-
-
-      public function getFridgeIngredientsByUser(){
-
-        $userFridge = DB::select("SELECT ingredient_categories.*, ingredients.*, 
-        ingredients_fridge.id as ingredient_fridge_id,
-        ingredients_fridge.quantity,
-        ingredients_fridge.unit_id,
-        units.unit_name,
-        fridges.id as fridge_id
-        FROM fridges
-        INNER JOIN ingredients_fridge ON ingredients_fridge.fridge_id = fridges.id
-        INNER JOIN ingredients ON ingredients.id = ingredients_fridge.ingredient_id
-        INNER JOIN ingredient_categories ON ingredient_categories.id = ingredients.ingredient_category_id
-        INNER JOIN units ON units.id = ingredients_fridge.unit_id
-        WHERE fridges.user_id = :id", ['id' => Auth::id()] );
-
+        $userFridge = $fridgeRepository->getUserFridge();
         $resourceIngredientsFrigde = new IngredientsFridge();
         $results =[];
-
         
         if (count($userFridge) > 0) {
-
             $results = ["id" => $userFridge[0]->fridge_id, "ingredients" => $resourceIngredientsFrigde->payload($userFridge)];
         }
         return response(["total_results" => count($userFridge), "results" => $results], 200);
-      }
+    }
      
       
-      public function addIngredientIntoFridge(Request $request)
+      public function addIngredientIntoFridge(Request $request, FridgeRepository $fridgeRepository)
       {
         $fridgeId = $request->fridgeId;
         $ingredientId = $request->ingredientId;
         $quantity = $request->quantity;
         $unit = $request->unit;
 
-        $checkIngredient = DB::table('ingredients_fridge')
-        ->where('ingredients_fridge.fridge_id', $fridgeId)
-        ->where('ingredients_fridge.ingredient_id' , $ingredientId)
-        ->first();
+        $ingredientFound = $fridgeRepository->getOneIngredientFridge($fridgeId, $ingredientId);
         $response = "En attente";
         
-        if($checkIngredient == null){
+        if($ingredientFound == null){
             try {
-                DB::table('ingredients_fridge')->insert(
-                ['fridge_id' => $fridgeId, 'ingredient_id' => $ingredientId, "quantity" => $quantity, "unit_id" => $unit]);
+                $response = $fridgeRepository->insertIngredientFridge($fridgeId, $ingredientId, $quantity, $unit);  
             } catch (\Throwable $th) {
-                
+                $response = "Une erreur est survenue. Echec de l'insertion.";
             }
-            $response = "Ajout réussis";
             return response()->json($response, 200);
-            
         }else{
-            if($unit == $checkIngredient->unit_id){
+            if($unit == $ingredientFound->unit_id){
                 try {
-                    DB::table('ingredients_fridge')
-                    ->where('ingredients_fridge.fridge_id', $fridgeId)
-                    ->where('ingredients_fridge.ingredient_id' , $ingredientId)
-                    ->update(['quantity' => $checkIngredient->quantity += $quantity]);
-                $response = "Nouvelle quantitée ajouter";
+                    $response = $fridgeRepository->insertNewQuantityIngredientFridge($fridgeId, $ingredientId,$ingredientFound, $quantity);
                 } catch (\Throwable $th) {
                 $response = "Echec d'ajout d'une nouvelle quantitée";
                 }
             }else{
                 $response = "Echec de l'ajout. L'unitée de mesure séléctionnée n'est pas la même que celle contenu dans votre fridgo.";
             }
-                
         }
         return response()->json($response, 200);
     }
 
-
-
-    public function updateIngredientIntoFridge(Request $request)
+    public function updateIngredientIntoFridge(Request $request, FridgeRepository $fridgeRepository)
     {
       $fridgeId = $request->fridgeId;
       $ingredientId = $request->ingredientId;
       $quantity = $request->quantity;
       $unit = $request->unit;
 
-      $checkIngredient = DB::table('ingredients_fridge')
-      ->where('ingredients_fridge.fridge_id', $fridgeId)
-      ->where('ingredients_fridge.ingredient_id' , $ingredientId)
-      ->first();
+      $ingredientFound = $fridgeRepository->getOneIngredientFridge($fridgeId, $ingredientId);
       $response = "En attente";
       
-        if($unit == $checkIngredient->unit_id){
+        if($unit == $ingredientFound->unit_id){
               try {
-                  DB::table('ingredients_fridge')
-                  ->where('ingredients_fridge.fridge_id', $fridgeId)
-                  ->where('ingredients_fridge.ingredient_id' , $ingredientId)
-                  ->update(['quantity' => $checkIngredient->quantity = $quantity]);
-              $response = "Quantitée modifié";
+                $response = $fridgeRepository->updateQuantityIngredientFridge($fridgeId, $ingredientId,$ingredientFound, $quantity);
               } catch (\Throwable $th) {
-              $response = "Echec de modification de la quantitée";
+                $response = "Echec de modification de la quantitée";
               }
-          }else{
-            // dd($checkIngredient->quantity, $checkIngredient->unit_id, $quantity, $unit);
+        }else{
             try {
-                DB::table('ingredients_fridge')
-                ->where('ingredients_fridge.fridge_id', $fridgeId)
-                ->where('ingredients_fridge.ingredient_id' , $ingredientId)
-                ->update(['quantity' => $checkIngredient->quantity = $quantity, "unit_id" => $checkIngredient->unit_id = $unit]);
-            $response = "Quantitée et unitée modifié";
+                $response = $fridgeRepository->updateQuantityAndUnitIngredientFridge($fridgeId, $ingredientId,$ingredientFound, $quantity, $unit);
             } catch (\Throwable $th) {
-            $response = "Echec de modification de la quantitée et de l'unitée";
+                $response = "Echec de modification de la quantitée et de l'unitée";
             }
           }
-              
-    
       return response()->json($response, 200);
   }
 
 
-        public function deleteIngredientFromFridge(Request $request)
+        public function deleteIngredientFromFridge(Request $request, FridgeRepository $fridgeRepository)
         {
-            
-            $idFridge = $request->fridgeId;
-            $idIngredient = $request->ingredientId;
-                        
-          try {
-             DB::table('ingredients_fridge')
-              ->where('ingredients_fridge.fridge_id', $idFridge)
-              ->where('ingredients_fridge.ingredient_id' , $idIngredient)
-              ->delete();
-          } catch (\Throwable $th) {
-    
-          }
-          $response = "Suppression réussis";
-          return response()->json($response, 200);
+            $fridgeId = $request->fridgeId;
+            $ingredientId = $request->ingredientId;
+            try {
+                $response = $fridgeRepository->deleteIngredientFridge($fridgeId, $ingredientId);
+            } catch (\Throwable $th) {
+                $response = "Une erreur est survenue, suppression échouée.";
+            }
+            return response()->json($response, 200);
         }
 
 
-        public function deleteAllIngredientsFromFridge(Request $request)
+        public function deleteAllIngredientsFromFridge(Request $request, FridgeRepository $fridgeRepository)
         {
-            $idFridge = $request->fridgeId;
-          try {
-             DB::table('ingredients_fridge')
-              ->where('ingredients_fridge.fridge_id', $idFridge)
-              ->truncate();
-          } catch (\Throwable $th) {
-    
-          }
-          $response = "Suppression réussis";
-          return response()->json($response, 200);
+            $fridgeId = $request->fridgeId;
+            try {
+                $response = $fridgeRepository->deleteAllIngredientFridge($fridgeId);
+            } catch (\Throwable $th) {
+                $response = "Une erreur est survenue, suppression des ingrédients échouée.";
+            }
+            return response()->json($response, 200);
         }
     }
     

@@ -1,14 +1,21 @@
 <?php
 
-use App\Http\Resources\IngredientsFridge;
+namespace App\Http\Repositories;
+
 use App\Models\Fridge;
-use App\Models\Repositories\BaseRepository;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
-class FridgeRepository {
+class FridgeRepository{
 
-    public function getFridgeById(){
+    protected $fridge;
+
+    public function __construct(Fridge $fridge)
+    {
+        $this->fridge = $fridge;
+    }
+
+    public function getUserFridge(){
 
         $userFridge = DB::select("SELECT ingredient_categories.*, ingredients.*, 
         ingredients_fridge.id as ingredient_fridge_id,
@@ -23,13 +30,79 @@ class FridgeRepository {
         INNER JOIN units ON units.id = ingredients_fridge.unit_id
         WHERE fridges.user_id = :id", ['id' => Auth::id()] );
 
-        $resourceIngredientsFrigde = new IngredientsFridge();
-        $results =[];
-        if (count($userFridge) > 0) {
+        return $userFridge;
+    }
 
-            $results = ["id" => $userFridge[0]->fridge_id, "ingredients" => $resourceIngredientsFrigde->payload($userFridge)];
-        }
-        return response(["total_results" => count($userFridge), "results" => $results], 200);
+    public function getOneIngredientFridge($fridgeId, $ingredientId){
 
+        $ingredientFound = DB::table('ingredients_fridge')
+        ->where('ingredients_fridge.fridge_id', $fridgeId)
+        ->where('ingredients_fridge.ingredient_id' , $ingredientId)
+        ->first();
+
+        return $ingredientFound;
+    }
+
+    public function insertIngredientFridge($fridgeId, $ingredientId, $quantity, $unit){
+
+        DB::table('ingredients_fridge')->insert(
+            ['fridge_id' => $fridgeId, 'ingredient_id' => $ingredientId, "quantity" => $quantity, "unit_id" => $unit]);
+        $response = "Ajout réussis";
+
+        return $response;
+    }
+
+    public function insertNewQuantityIngredientFridge($fridgeId, $ingredientId,$ingredientFound, $quantity){
+
+        DB::table('ingredients_fridge')
+                    ->where('ingredients_fridge.fridge_id', $fridgeId)
+                    ->where('ingredients_fridge.ingredient_id' , $ingredientId)
+                    ->update(['quantity' => $ingredientFound->quantity += $quantity]);
+        $response = "Nouvelle quantitée ajouter";
+
+        return $response;
+    }
+
+    public function updateQuantityIngredientFridge($fridgeId, $ingredientId,$ingredientFound, $quantity){
+
+        DB::table('ingredients_fridge')
+                ->where('ingredients_fridge.fridge_id', $fridgeId)
+                ->where('ingredients_fridge.ingredient_id' , $ingredientId)
+                ->update(['quantity' => $ingredientFound->quantity = $quantity]);
+        $response = "Quantitée modifié";
+
+        return $response;
+    }
+
+    public function updateQuantityAndUnitIngredientFridge($fridgeId, $ingredientId,$ingredientFound, $quantity, $unit){
+
+        DB::table('ingredients_fridge')
+                ->where('ingredients_fridge.fridge_id', $fridgeId)
+                ->where('ingredients_fridge.ingredient_id' , $ingredientId)
+                ->update(['quantity' => $ingredientFound->quantity = $quantity, "unit_id" => $ingredientFound->unit_id = $unit == null ? $ingredientFound->unit_id : $unit]);
+        $response = "Quantitée et unitée modifié";
+
+        return $response;
+    }
+
+    public function deleteIngredientFridge($fridgeId, $ingredientId){
+
+        DB::table('ingredients_fridge')
+              ->where('ingredients_fridge.fridge_id', $fridgeId)
+              ->where('ingredients_fridge.ingredient_id' , $ingredientId)
+              ->delete();
+        $response = "Suppression réussis";
+
+        return $response;
+    }
+
+
+    public function deleteAllIngredientFridge($fridgeId){
+
+        DB::table('ingredients_fridge')
+              ->where('ingredients_fridge.fridge_id', $fridgeId)
+              ->truncate();
+        $response = "Suppression des ingrédients réussis";
+        return $response;
     }
  }

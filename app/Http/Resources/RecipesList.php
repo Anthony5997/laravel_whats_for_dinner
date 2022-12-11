@@ -3,34 +3,26 @@
 namespace App\Http\Resources;
 
 use App\Http\Controllers\FavoriteController;
-use App\Http\Controllers\FridgeController;
 use App\Http\Controllers\ReviewsController;
-use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 
 class RecipesList
 {
  
     
-    public function payload($data)
+    public function payload($data, $userIngredientsFridge)
     {
 
         $favoriteController = new FavoriteController();
-        $fridgeController = new FridgeController();
         $reviewController = new ReviewsController();
-        $userFridge = $fridgeController->getFridgeIngredientsByUser();
-        
-        $dataDecode = json_decode($userFridge->content());
-        $dataDecode = json_decode($userFridge->content());
-        $fridgeIngredientsId = [];
-        if(isset($dataDecode->results->ingredients)){
 
-            foreach ($dataDecode->results->ingredients as $ingredient) {
+        
+        $fridgeIngredientsId = [];
+        if(isset($userIngredientsFridge)){
+            foreach ($userIngredientsFridge as $ingredient) {
                 array_push($fridgeIngredientsId, $ingredient->id);
             }
         }
-    
+        
         $response = [];
    
 

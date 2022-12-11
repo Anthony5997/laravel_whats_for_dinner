@@ -7,7 +7,6 @@ use Illuminate\Http\Resources\Json\JsonResource;
 class IngredientsFridge
 {
  
-    
     public function payload($data) 
     {
         $response = [];
@@ -23,8 +22,6 @@ class IngredientsFridge
                 "unit_id"=> $data[$i]->unit_id,
                 "unit_name"=> $data[$i]->unit_name
                 ]);
-            
-
         } 
         return $response;
     }
