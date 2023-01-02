@@ -16,5 +16,6 @@ Route::group([
     $router->resource('ingredients', IngredientController::class);
     $router->resource('ingredient-categories', IngredientCategoryController::class);
     $router->resource('units', UnitController::class);
+    $router->resource('recipes', RecipeController::class);
 
 });

@@ -58,7 +58,7 @@ class RecipesList
                     "id" => $ingredient->ingredient_id,
                     "name" => $ingredient->integration_name,
                     "image"=> $ingredient->image === null ? '' : $ingredient->image,
-                    "category_id"=> $ingredient->ingredient_category_id,
+                    "ingredient_category_id"=> $ingredient->ingredient_category_id,
                     "quantity"=> $ingredient->quantity === null ? 0 : $ingredient->quantity,
                     "unit_name"=> $ingredient->unit === "" ? null : $ingredient->unit
                 ]);
@@ -68,7 +68,7 @@ class RecipesList
                     "id" => $ingredient->ingredient_id,
                     "name" => $ingredient->integration_name,
                     "image"=> $ingredient->image === null ? '' : $ingredient->image,
-                    "category_id"=> $ingredient->ingredient_category_id,
+                    "ingredient_category_id"=> $ingredient->ingredient_category_id,
                     "quantity"=> $ingredient->quantity === null ? 0 : $ingredient->quantity,
                     "unit_name"=> $ingredient->unit === "" ? null : $ingredient->unit
                 ]);

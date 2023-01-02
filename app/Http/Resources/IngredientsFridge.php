@@ -16,7 +16,7 @@ class IngredientsFridge
                 "id" => $data[$i]->id,
                 "name" => $data[$i]->name,
                 "image"=> $data[$i]->image === null ? '' : $data[$i]->image,
-                "category_id"=> $data[$i]->ingredient_category_id,
+                "ingredient_category_id"=> $data[$i]->ingredient_category_id,
                 "category_name"=> $data[$i]->category_name,
                 "quantity"=> $data[$i]->quantity === null ? 0 : $data[$i]->quantity,
                 "unit_id"=> $data[$i]->unit_id,
