@@ -343,11 +343,4 @@ class RecipeController extends Controller
         }
         return $ingredientName;
     }
-
-    
-   
-
-    
-   
-
 }
