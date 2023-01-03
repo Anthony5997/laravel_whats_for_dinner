@@ -3,7 +3,6 @@
 namespace App\Http\Repositories;
 
 use App\Models\Recipe;
-use App\Models\Repositories\BaseRepository;
 use Illuminate\Support\Facades\DB;
 
 class RecipeListRepository{

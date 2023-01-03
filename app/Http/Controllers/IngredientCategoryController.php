@@ -64,7 +64,39 @@ class IngredientCategoryController extends Controller
     }
 
 
-    
+     /**
+     * @OA\Get(
+     *      path="/getAllIngredientCategories",
+     *      operationId="getAllIngredientCategories",
+     *      tags={"Catégorie d'ingrédients"},
+
+     *      summary="Récupère les catégories d'ingrédient et les ingrédients associer.",
+     *      description="Retourne la liste de catégories d'ingrédient et les ingrédients associer.",
+     *      @OA\Response(
+     *          response=200,
+     *          description="Opération réussis",
+     *          @OA\MediaType(
+     *           mediaType="application/json",
+     *      )
+     *      ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Non authentifié",
+     *      ),
+     *      @OA\Response(
+     *          response=403,
+     *          description="Accès refusé"
+     *      ),
+     * @OA\Response(
+     *      response=400,
+     *      description="Requête erronée"
+     *   ),
+     * @OA\Response(
+     *      response=404,
+     *      description="Aucun résultat"
+     *   ),
+     *  )
+     */
     public function getAllIngredientCategories(){
 
         $allIngredientCategories = ResourcesIngredientCategory::collection(IngredientCategory::all());
@@ -73,6 +105,39 @@ class IngredientCategoryController extends Controller
         return response()->json($response, 200);
     }
 
+       /**
+     * @OA\Post(
+     *      path="/findCategory",
+     *      operationId="findCategory",
+     *      tags={"Catégorie d'ingrédients"},
+
+     *      summary="Recherche les catégories d'ingrédient et les ingrédients associer à la saisie utilisateur.",
+     *      description="Retourne la liste de catégories d'ingrédient et les ingrédients associer à la saisie utilisateur.",
+     *      @OA\Response(
+     *          response=200,
+     *          description="Opération réussis",
+     *          @OA\MediaType(
+     *           mediaType="application/json",
+     *      )
+     *      ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Non authentifié",
+     *      ),
+     *      @OA\Response(
+     *          response=403,
+     *          description="Accès refusé"
+     *      ),
+     * @OA\Response(
+     *      response=400,
+     *      description="Requête erronée"
+     *   ),
+     * @OA\Response(
+     *      response=404,
+     *      description="Aucun résultat"
+     *   ),
+     *  )
+     */
     public function findCategory(Request $request){
 
         $userInput = $request->input;

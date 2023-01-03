@@ -12,7 +12,6 @@ class RecipeController extends Controller
 {
 
     public function index(){
-
     }
 
     public function getApiInfos(){
@@ -115,8 +114,6 @@ class RecipeController extends Controller
         }
 
     }
-
-
     
     public function formatStringWithNoAccents($entre)
     {
@@ -177,7 +174,7 @@ class RecipeController extends Controller
         if($jsonResponse["image"]){
 
             $recipeImage = $jsonResponse["image"];
-            $randomNumber = rand(0, 99999);
+            // $randomNumber = rand(0, 99999);
             $image = file_get_contents("$recipeImage");
             $recipeImageName = $this->formatStringWithNoAccents($jsonResponse["title"]);
             $recipeImageName = utf8_encode(strtolower(str_replace([" ", "'", ":", "@","\""], "", $recipeImageName)));
@@ -318,11 +315,4 @@ class RecipeController extends Controller
         }
         return $ingredientName;
     }
-
-    
-   
-
-    
-   
-
 }

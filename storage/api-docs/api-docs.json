@@ -1,0 +1,339 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "What's For Dinner API Documentation",
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/getFavoriteRecipe": {
+            "get": {
+                "tags": [
+                    "Favoris"
+                ],
+                "summary": "Récupère les recettes favorites de l'utilisateur.",
+                "description": "Retourne la liste de recettes favorites de l'utilisateur",
+                "operationId": "getFavoriteRecipe",
+                "responses": {
+                    "200": {
+                        "description": "Opération réussis",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "401": {
+                        "description": "Non authentifié"
+                    },
+                    "403": {
+                        "description": "Accès refusé"
+                    },
+                    "400": {
+                        "description": "Requête erronée"
+                    },
+                    "404": {
+                        "description": "Aucun résultat"
+                    }
+                }
+            }
+        },
+        "/getFridgeIngredientsByUser": {
+            "get": {
+                "tags": [
+                    "Frigo"
+                ],
+                "summary": "Récupère la liste d'ingrédients du frigo utilisateur.",
+                "description": "Retourne un frigo utilisateur & sa liste complète d'ingrédients",
+                "operationId": "getFridgeIngredientsByUser",
+                "responses": {
+                    "200": {
+                        "description": "Opération réussis",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "401": {
+                        "description": "Non authentifié"
+                    },
+                    "403": {
+                        "description": "Accès refusé"
+                    },
+                    "400": {
+                        "description": "Requête erronée"
+                    },
+                    "404": {
+                        "description": "Aucun résultat"
+                    }
+                }
+            }
+        },
+        "/addIngredientIntoFridge": {
+            "post": {
+                "tags": [
+                    "Frigo"
+                ],
+                "summary": "Ajout un ingrédient au frigo utilisateur.",
+                "description": "Retourne une réponse et un status 200 en cas de succès.",
+                "operationId": "addIngredientIntoFridge",
+                "responses": {
+                    "200": {
+                        "description": "Opération réussis",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "401": {
+                        "description": "Non authentifié"
+                    },
+                    "403": {
+                        "description": "Accès refusé"
+                    },
+                    "400": {
+                        "description": "Requête erronée"
+                    },
+                    "404": {
+                        "description": "Aucun résultat"
+                    }
+                }
+            }
+        },
+        "/updateIngredientIntoFridge": {
+            "patch": {
+                "tags": [
+                    "Frigo"
+                ],
+                "summary": "Met à jour un ingrédient dans le frigo utilisateur.",
+                "description": "Retourne une réponse et un status 200 en cas de succès. Permet de modifier la quantité et l'unité d'un ingrédient dans le frigo de l'utilisateur.",
+                "operationId": "updateIngredientIntoFridge",
+                "responses": {
+                    "200": {
+                        "description": "Opération réussis",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "401": {
+                        "description": "Non authentifié"
+                    },
+                    "403": {
+                        "description": "Accès refusé"
+                    },
+                    "400": {
+                        "description": "Requête erronée"
+                    },
+                    "404": {
+                        "description": "Aucun résultat"
+                    }
+                }
+            }
+        },
+        "/deleteIngredientFromFridge": {
+            "delete": {
+                "tags": [
+                    "Frigo"
+                ],
+                "summary": "Retire un ingrédient au frigo utilisateur.",
+                "description": "Retourne une réponse et un status 200 en cas de succès.",
+                "operationId": "deleteIngredientFromFridge",
+                "responses": {
+                    "200": {
+                        "description": "Opération réussis",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "401": {
+                        "description": "Non authentifié"
+                    },
+                    "403": {
+                        "description": "Accès refusé"
+                    },
+                    "400": {
+                        "description": "Requête erronée"
+                    },
+                    "404": {
+                        "description": "Aucun résultat"
+                    }
+                }
+            }
+        },
+        "/deleteAllIngredientsFromFridge": {
+            "delete": {
+                "tags": [
+                    "Frigo"
+                ],
+                "summary": "Retire tous les ingrédients du frigo utilisateur.",
+                "description": "Retourne une réponse et un status 200 en cas de succès.",
+                "operationId": "deleteAllIngredientsFromFridge",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "404": {
+                        "description": "not found"
+                    }
+                }
+            }
+        },
+        "/getAllIngredientCategories": {
+            "get": {
+                "tags": [
+                    "Catégorie d'ingrédients"
+                ],
+                "summary": "Récupère les catégories d'ingrédient et les ingrédients associer.",
+                "description": "Retourne la liste de catégories d'ingrédient et les ingrédients associer.",
+                "operationId": "getAllIngredientCategories",
+                "responses": {
+                    "200": {
+                        "description": "Opération réussis",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "401": {
+                        "description": "Non authentifié"
+                    },
+                    "403": {
+                        "description": "Accès refusé"
+                    },
+                    "400": {
+                        "description": "Requête erronée"
+                    },
+                    "404": {
+                        "description": "Aucun résultat"
+                    }
+                }
+            }
+        },
+        "/findCategory": {
+            "post": {
+                "tags": [
+                    "Catégorie d'ingrédients"
+                ],
+                "summary": "Recherche les catégories d'ingrédient et les ingrédients associer à la saisie utilisateur.",
+                "description": "Retourne la liste de catégories d'ingrédient et les ingrédients associer à la saisie utilisateur.",
+                "operationId": "findCategory",
+                "responses": {
+                    "200": {
+                        "description": "Opération réussis",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "401": {
+                        "description": "Non authentifié"
+                    },
+                    "403": {
+                        "description": "Accès refusé"
+                    },
+                    "400": {
+                        "description": "Requête erronée"
+                    },
+                    "404": {
+                        "description": "Aucun résultat"
+                    }
+                }
+            }
+        },
+        "/getAllIngredients": {
+            "get": {
+                "tags": [
+                    "Ingrédients"
+                ],
+                "summary": "Récupère tout les ingrédients.",
+                "description": "Retourne la liste de tout les ingrédients.",
+                "operationId": "getAllIngredients",
+                "responses": {
+                    "200": {
+                        "description": "Opération réussis",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "401": {
+                        "description": "Non authentifié"
+                    },
+                    "403": {
+                        "description": "Accès refusé"
+                    },
+                    "400": {
+                        "description": "Requête erronée"
+                    },
+                    "404": {
+                        "description": "Aucun résultat"
+                    }
+                }
+            }
+        },
+        "/getIngredientsByCategory": {
+            "post": {
+                "tags": [
+                    "Ingrédients"
+                ],
+                "summary": "Récupère des ingrédients par catégorie.",
+                "description": "Retourne la liste d'ingrédients en fonction d'un catégorie spécifique.",
+                "operationId": "getIngredientsByCategory",
+                "responses": {
+                    "200": {
+                        "description": "Opération réussis",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "401": {
+                        "description": "Non authentifié"
+                    },
+                    "403": {
+                        "description": "Accès refusé"
+                    },
+                    "400": {
+                        "description": "Requête erronée"
+                    },
+                    "404": {
+                        "description": "Aucun résultat"
+                    }
+                }
+            }
+        },
+        "/findIngredients": {
+            "post": {
+                "tags": [
+                    "Ingrédients"
+                ],
+                "summary": "Recherche des ingrédients spécifique associer à la saisie utilisateur.",
+                "description": "Retourne une liste d'ingrédients associer à la saisie utilisateur.",
+                "operationId": "findIngredients",
+                "responses": {
+                    "200": {
+                        "description": "Opération réussis",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "401": {
+                        "description": "Non authentifié"
+                    },
+                    "403": {
+                        "description": "Accès refusé"
+                    },
+                    "400": {
+                        "description": "Requête erronée"
+                    },
+                    "404": {
+                        "description": "Aucun résultat"
+                    }
+                }
+            }
+        }
+    }
+}

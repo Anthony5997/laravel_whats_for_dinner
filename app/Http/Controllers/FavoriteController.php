@@ -35,6 +35,7 @@ class FavoriteController extends Controller
         //
     }
 
+
     public function getFavorite($recipeId)
     {
         $isFavorite = Favorite::where('user_id', Auth::id())->where("recipe_id", $recipeId)->first();
@@ -42,6 +43,39 @@ class FavoriteController extends Controller
   
     }
 
+    /**
+     * @OA\Get(
+     *      path="/getFavoriteRecipe",
+     *      operationId="getFavoriteRecipe",
+     *      tags={"Favoris"},
+
+     *      summary="Récupère les recettes favorites de l'utilisateur.",
+     *      description="Retourne la liste de recettes favorites de l'utilisateur",
+     *      @OA\Response(
+     *          response=200,
+     *          description="Opération réussis",
+     *          @OA\MediaType(
+     *           mediaType="application/json",
+     *      )
+     *      ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Non authentifié",
+     *      ),
+     *      @OA\Response(
+     *          response=403,
+     *          description="Accès refusé"
+     *      ),
+     * @OA\Response(
+     *      response=400,
+     *      description="Requête erronée"
+     *   ),
+     * @OA\Response(
+     *      response=404,
+     *      description="Aucun résultat"
+     *   ),
+     *  )
+     */
     public function getFavoriteRecipe(RecipeListRepository $recipeListRepository, FridgeRepository $fridgeRepository)
     {
 

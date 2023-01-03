@@ -41,6 +41,39 @@ class FridgeController extends Controller
         //
     }
 
+        /**
+     * @OA\Get(
+     *      path="/getFridgeIngredientsByUser",
+     *      operationId="getFridgeIngredientsByUser",
+     *      tags={"Frigo"},
+
+     *      summary="Récupère la liste d'ingrédients du frigo utilisateur.",
+     *      description="Retourne un frigo utilisateur & sa liste complète d'ingrédients",
+     *      @OA\Response(
+     *          response=200,
+     *          description="Opération réussis",
+     *          @OA\MediaType(
+     *           mediaType="application/json",
+     *      )
+     *      ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Non authentifié",
+     *      ),
+     *      @OA\Response(
+     *          response=403,
+     *          description="Accès refusé"
+     *      ),
+     * @OA\Response(
+     *      response=400,
+     *      description="Requête erronée"
+     *   ),
+     * @OA\Response(
+     *      response=404,
+     *      description="Aucun résultat"
+     *   ),
+     *  )
+     */
     public function getFridgeIngredientsByUser(FridgeRepository $fridgeRepository){
 
         $userFridge = $fridgeRepository->getUserFridge();
@@ -53,7 +86,40 @@ class FridgeController extends Controller
         return response(["total_results" => count($userFridge), "results" => $results], 200);
     }
      
-      
+    
+    /**
+     * @OA\Post(
+     *      path="/addIngredientIntoFridge",
+     *      operationId="addIngredientIntoFridge",
+     *      tags={"Frigo"},
+
+     *      summary="Ajout un ingrédient au frigo utilisateur.",
+     *      description="Retourne une réponse et un status 200 en cas de succès.",
+     *      @OA\Response(
+     *          response=200,
+     *          description="Opération réussis",
+     *          @OA\MediaType(
+     *           mediaType="application/json",
+     *      )
+     *      ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Non authentifié",
+     *      ),
+     *      @OA\Response(
+     *          response=403,
+     *          description="Accès refusé"
+     *      ),
+     * @OA\Response(
+     *      response=400,
+     *      description="Requête erronée"
+     *   ),
+     * @OA\Response(
+     *      response=404,
+     *      description="Aucun résultat"
+     *   ),
+     *  )
+     */
       public function addIngredientIntoFridge(Request $request, FridgeRepository $fridgeRepository)
       {
         $fridgeId = $request->fridgeId;
@@ -85,6 +151,40 @@ class FridgeController extends Controller
         return response()->json($response, 200);
     }
 
+    
+            /**
+     * @OA\Patch(
+     *      path="/updateIngredientIntoFridge",
+     *      operationId="updateIngredientIntoFridge",
+     *      tags={"Frigo"},
+
+     *      summary="Met à jour un ingrédient dans le frigo utilisateur.",
+     *      description="Retourne une réponse et un status 200 en cas de succès. Permet de modifier la quantité et l'unité d'un ingrédient dans le frigo de l'utilisateur.",
+     *      @OA\Response(
+     *          response=200,
+     *          description="Opération réussis",
+     *          @OA\MediaType(
+     *           mediaType="application/json",
+     *      )
+     *      ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Non authentifié",
+     *      ),
+     *      @OA\Response(
+     *          response=403,
+     *          description="Accès refusé"
+     *      ),
+     * @OA\Response(
+     *      response=400,
+     *      description="Requête erronée"
+     *   ),
+     * @OA\Response(
+     *      response=404,
+     *      description="Aucun résultat"
+     *   ),
+     *  )
+     */
     public function updateIngredientIntoFridge(Request $request, FridgeRepository $fridgeRepository)
     {
       $fridgeId = $request->fridgeId;
@@ -112,6 +212,39 @@ class FridgeController extends Controller
   }
 
 
+       /**
+     * @OA\Delete(
+     *      path="/deleteIngredientFromFridge",
+     *      operationId="deleteIngredientFromFridge",
+     *      tags={"Frigo"},
+
+     *      summary="Retire un ingrédient au frigo utilisateur.",
+     *      description="Retourne une réponse et un status 200 en cas de succès.",
+     *      @OA\Response(
+     *          response=200,
+     *          description="Opération réussis",
+     *          @OA\MediaType(
+     *           mediaType="application/json",
+     *      )
+     *      ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Non authentifié",
+     *      ),
+     *      @OA\Response(
+     *          response=403,
+     *          description="Accès refusé"
+     *      ),
+     * @OA\Response(
+     *      response=400,
+     *      description="Requête erronée"
+     *   ),
+     * @OA\Response(
+     *      response=404,
+     *      description="Aucun résultat"
+     *   ),
+     *  )
+     */
         public function deleteIngredientFromFridge(Request $request, FridgeRepository $fridgeRepository)
         {
             $fridgeId = $request->fridgeId;
@@ -125,6 +258,39 @@ class FridgeController extends Controller
         }
 
 
+        /**
+     * @OA\Delete(
+     *      path="/deleteAllIngredientsFromFridge",
+     *      operationId="deleteAllIngredientsFromFridge",
+     *      tags={"Frigo"},
+
+     *      summary="Retire tous les ingrédients du frigo utilisateur.",
+     *      description="Retourne une réponse et un status 200 en cas de succès.",
+     *      @OA\Response(
+     *          response=200,
+     *          description="Successful operation",
+     *          @OA\MediaType(
+     *           mediaType="application/json",
+     *      )
+     *      ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Unauthenticated",
+     *      ),
+     *      @OA\Response(
+     *          response=403,
+     *          description="Forbidden"
+     *      ),
+     * @OA\Response(
+     *      response=400,
+     *      description="Bad Request"
+     *   ),
+     * @OA\Response(
+     *      response=404,
+     *      description="not found"
+     *   ),
+     *  )
+     */
         public function deleteAllIngredientsFromFridge(Request $request, FridgeRepository $fridgeRepository)
         {
             $fridgeId = $request->fridgeId;
