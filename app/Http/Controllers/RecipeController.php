@@ -88,10 +88,38 @@ class RecipeController extends Controller
             // "https://www.marmiton.org/recettes/recette_tete-de-veau-a-la-vinaigrette_25659.aspx",
             // "https://www.marmiton.org/recettes/recette_saucisse-de-morteau-au-four_164997.aspx",
             // "https://www.marmiton.org/recettes/recette_boudin-noir-poele-aux-pommes_27785.aspx",
+            // "https://www.cuisineaz.com/recettes/calmar-poeles-a-l-ail-et-au-persil-40432.aspx",
+            // "https://www.cuisineaz.com/recettes/enchiladas-56332.aspx",
+            // "https://www.cuisineaz.com/recettes/chilaquiles-102135.aspx",
+            // "https://www.cuisineaz.com/recettes/chekchouka-12419.aspx",
+            // // "https://www.cuisineaz.com/recettes/potee-langroise-traditionnelle-115149.aspx",(maudit)
+            // "https://www.cuisineaz.com/recettes/ficelle-picarde-traditionnelle-115082.aspx",
+            // "https://www.cuisineaz.com/recettes/omelette-du-jardinier-90699.aspx",
+            // "https://www.cuisineaz.com/recettes/omelette-parisienne-61966.aspx",
+            // "https://www.cuisineaz.com/recettes/parmentier-de-canard-aux-marrons-109051.aspx",
+            // "https://www.cuisineaz.com/recettes/empanadas-au-thon-99684.aspx",
+            // "https://www.cuisineaz.com/recettes/omelette-aux-epinards-58277.aspx",
+            // "https://www.cuisineaz.com/recettes/aligot-traditionnel-114992.aspx",
+            // "https://www.cuisineaz.com/recettes/ecrase-de-pommes-de-terre-103294.aspx",
+            // // "https://www.cuisineaz.com/recettes/frites-de-carottes-au-four-105798.aspx",(maudit)
+            // // "https://www.cuisineaz.com/recettes/polenta-cuite-au-four-81577.aspx",(maudit)
+            // "https://www.cuisineaz.com/recettes/shiitake-teriyaki-110587.aspx",
+            // "https://www.cuisineaz.com/recettes/galette-de-pommes-de-terre-103350.aspx",
+            // "https://www.cuisineaz.com/recettes/cannelloni-a-la-sicilienne-78712.aspx",
+            // "https://www.cuisineaz.com/recettes/penne-a-la-creme-65802.aspx",
+            // "https://www.cuisineaz.com/recettes/coquillettes-au-cheddar-79457.aspx",
+            // "https://www.cuisineaz.com/recettes/pates-a-la-fondue-de-poireaux-61330.aspx",
+            // "https://www.cuisineaz.com/recettes/pates-aux-brocolis-et-au-parmesan-53953.aspx",
+            // "https://www.cuisineaz.com/recettes/tagliatelles-aux-crevettes-epicees-83018.aspx",
+            // "https://www.cuisineaz.com/recettes/cannelloni-aux-epinards-et-a-la-ricotta-13061.aspx",
+            // "https://www.cuisineaz.com/recettes/spaghettis-aux-champignons-38156.aspx",
+            // "https://www.cuisineaz.com/recettes/ravioles-a-la-sauce-tomate-et-aux-herbes-fraiches-62330.aspx",
+            // "https://www.cuisineaz.com/recettes/cannellonis-a-la-viande-et-a-la-sauce-tomate-61077.aspx",
         ];
         foreach ($urls as $url) {
             $response = Http::get("https://api.spoonacular.com/recipes/extract?url=$url&apiKey=$token&analyze=true&forceExtraction=true&includeTaste=true");
             $jsonResponse = $response->json();
+            // dd($jsonResponse);
             try {        
                 $user = User::findOrFail("f3834b53-e4c7-11ec-a01b-a0cec8e34305");
                 $recipeImageName = $this->getRecipeImage($jsonResponse);
@@ -315,4 +343,11 @@ class RecipeController extends Controller
         }
         return $ingredientName;
     }
+
+    
+   
+
+    
+   
+
 }
