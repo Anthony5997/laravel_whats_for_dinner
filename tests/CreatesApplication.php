@@ -3,6 +3,7 @@
 namespace Tests;
 
 use Illuminate\Contracts\Console\Kernel;
+use Illuminate\Support\Facades\Artisan;
 
 trait CreatesApplication
 {
@@ -18,5 +19,15 @@ trait CreatesApplication
         $app->make(Kernel::class)->bootstrap();
 
         return $app;
+    }
+
+    protected function initDatabase()
+    {
+        Artisan::call('migrate');
+    }
+
+    protected function resetDatabase()
+    {
+        Artisan::call('migrate:reset');
     }
 }

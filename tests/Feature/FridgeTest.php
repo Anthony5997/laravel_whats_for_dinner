@@ -7,24 +7,14 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;
 
-class ExampleTest extends TestCase
+class FridgeTest extends TestCase
 {
     use RefreshDatabase;
-    /**
-     * A basic test example.
-     *
-     * @return void
-     */
-    // public function test_example()
-    // {
-    //     $response = $this->get('/');
-        
-    //     $response->assertStatus(200);
-    // }
-    
+  
     public function setUp(): void
     {
         parent::setUp();
+        
         $this->initDatabase();
     }
 
@@ -34,15 +24,21 @@ class ExampleTest extends TestCase
         parent::tearDown();
     }
 
- 
-
-    public function test_get_recipe()
+    public function test_get_fridge()
     {
-        Sanctum::actingAs(User::factory()->create());
+        $user = $this->postJson('api/auth/register', [
+            'nickname' => 'Antho',
+            'email' => 'antho@test.com',
+            'password' => 'azertyui'
+        ]);
 
-        $response = $this->getJson('/api/recipe/potentialRecipes');
 
+        $user = new User($user['user']);
+        
+        Sanctum::actingAs($user);
+
+        $response = $this->getJson('/api/fridge');
         $response->assertOk();
+        var_dump($response->content());
     }
-
 }
