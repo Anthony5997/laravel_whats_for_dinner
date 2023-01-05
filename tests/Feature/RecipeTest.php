@@ -1,38 +1,41 @@
 <?php
 
-// namespace Tests\Feature;
+namespace Tests\Feature;
 
-// use App\Models\User;
-// use Illuminate\Foundation\Testing\RefreshDatabase;
-// use Laravel\Sanctum\Sanctum;
-// use Tests\TestCase;
+use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Laravel\Sanctum\Sanctum;
+use Tests\TestCase;
 
-// class RecipeTest extends TestCase
-// {
-//     use RefreshDatabase;
-  
-//     public function setUp(): void
-//     {
-//         parent::setUp();
-        
-//         $this->initDatabase();
-//     }
+class RecipeTest extends TestCase{
+    use RefreshDatabase;
 
-//     public function tearDown(): void
-//     {
-//         $this->resetDatabase();
-//         parent::tearDown();
-//     }
+    
+    public function setUp(): void
+    {
+        parent::setUp();
+        $this->initDatabase();
+    }
 
-//     public function test_get_recipe()
-//     {
+    public function tearDown(): void
+    {
+        $this->resetDatabase();
+        parent::tearDown();
+    }
 
-//         Sanctum::actingAs(User::factory()->create());
 
-//         $response = $this->getJson('/api/recipe/potentialRecipes');
+    public function test_get_recipe()
+    {
+        Sanctum::actingAs(User::factory()->create());
 
-//         var_dump($response);
+        $response = $this->getJson('/api/recipe/potentialRecipes');
 
-//         $response->assertOk();
-//     }
-// }
+        $response->assertOk();
+    }
+
+    public function test_insert_recipe()
+    {
+        $response = $this->getJson('api/record');
+        $response->assertStatus(200);
+    }
+}

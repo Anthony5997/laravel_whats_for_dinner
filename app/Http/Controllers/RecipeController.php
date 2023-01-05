@@ -18,7 +18,7 @@ class RecipeController extends Controller
 
         $token = "c2ae3ed4529e43528e15d405c8e2bfa9";
         $urls =[
-            // "https://www.marmiton.org/recettes/recette_tacos-mexicains_34389.aspx",
+            "https://www.marmiton.org/recettes/recette_tacos-mexicains_34389.aspx",
             // "https://www.marmiton.org/recettes/recette_spaghetti-bolognaise_19840.aspx",
             // "https://www.marmiton.org/recettes/recette_fajitas-au-poulet_26631.aspx",
             // "https://www.marmiton.org/recettes/recette_brandade-de-morue_12736.aspx",
@@ -119,9 +119,8 @@ class RecipeController extends Controller
         foreach ($urls as $url) {
             $response = Http::get("https://api.spoonacular.com/recipes/extract?url=$url&apiKey=$token&analyze=true&forceExtraction=true&includeTaste=true");
             $jsonResponse = $response->json();
-            // dd($jsonResponse);
-            try {        
-                $user = User::findOrFail("f3834b53-e4c7-11ec-a01b-a0cec8e34305");
+            try {
+                 $user = User::findOrFail("f3834b53-e4c7-11ec-a01b-a0cec8e34305");
                 $recipeImageName = $this->getRecipeImage($jsonResponse);
                 if(!Recipe::where('title',$jsonResponse["title"])->first()){
                     $recipe = $this->insertRecipeInfo($jsonResponse, $user, $recipeImageName);
@@ -136,13 +135,13 @@ class RecipeController extends Controller
             } catch (\Throwable $th) {
                 echo $th->getMessage();
             }
-            echo "<hr>";
-            echo "<hr>";
-            echo "<hr>";
+            // echo "<hr>";
+            // echo "<hr>";
+            // echo "<hr>";
         }
 
     }
-    
+
     public function formatStringWithNoAccents($entre)
     {
         $search  = array('À', 'Á', 'Â', 'Ã', 'Ä', 'Å', 'Ç', 'È', 'É', 'Ê', 'Ë', 'Ì', 'Í', 'Î', 'Ï', 'Ò', 'Ó', 'Ô', 'Õ', 'Ö', 'Ù', 'Ú', 'Û', 'Ü', 'Ý', 'à', 'á', 'â', 'ã', 'ä', 'å', 'ç', 'è', 'é', 'ê', 'ë', 'ì', 'í', 'î', 'ï', 'ð', 'ò', 'ó', 'ô', 'õ', 'ö', 'ù', 'ú', 'û', 'ü', 'ý', 'ÿ');
@@ -187,8 +186,8 @@ class RecipeController extends Controller
                 break;
             case 'baking':
                 $ingredientCategorie = 11;
-                break;   
-            
+                break;
+
             default:
                 $ingredientCategorie = 11;
                 echo "<p>Aliment non catégorisé</p>";
@@ -209,13 +208,13 @@ class RecipeController extends Controller
             if(strlen($recipeImageName) >= 15){
                 $recipeImageName = substr($recipeImageName, 0, strlen($recipeImageName)). ".jpeg";
             }else{
-                $recipeImageName = $recipeImageName. ".jpeg"; 
+                $recipeImageName = $recipeImageName. ".jpeg";
             }
             file_put_contents(public_path("images\\recipe\\$recipeImageName"), $image);
-            echo "<p>- Image Recette ajouté  </p>";
-    
+            // echo "<p>- Image Recette ajouté  </p>";
+
         }else{
-            echo "<p>- Aucune Image Recette ajouté  </p>";
+            // echo "<p>- Aucune Image Recette ajouté  </p>";
             $recipeImageName ="default_recipe.jpeg";
         }
         return $recipeImageName;
@@ -234,7 +233,7 @@ class RecipeController extends Controller
             }
 
             file_put_contents(public_path("images\ingredients\\$ingredientImageName"), $image);
-            
+
             echo "<p>- Image Ingrédient '$ingredientImageName' ajouté  </p>";
         }else{
             $ingredientImageName = "default_ingredient.jpeg";
@@ -248,7 +247,7 @@ class RecipeController extends Controller
     {
         $stepNumber = 1;
         foreach($jsonResponse["analyzedInstructions"] as $steps){
-            
+
             foreach($steps["steps"] as $item){
 
                 $recipeStep = new RecipeStep();
@@ -306,7 +305,7 @@ class RecipeController extends Controller
     {
         foreach ($allingredientInRecipe as $ingredientInRecipe) {
 
-            echo "<hr>";        
+            echo "<hr>";
 
             $ingredientName = $this->formatIngredientName($ingredientInRecipe);
 
@@ -337,7 +336,7 @@ class RecipeController extends Controller
         if(str_contains($ingredientInRecipe['originalName'], 'de ')){
             $ingredientName = explode("de ", $ingredientInRecipe['originalName'], 2 );
             $ingredientName = $ingredientName[1];
-    
+
         }else{
             $ingredientName = $ingredientInRecipe['originalName'];
         }

@@ -24,21 +24,58 @@ class FridgeTest extends TestCase
         parent::tearDown();
     }
 
+    public function test_add_fridge_ingredient()
+    {
+     
+        $user = $this->authenticateUser();
+        
+        Sanctum::actingAs($user['user']);
+        $this->initDataInDatabase();
+        
+
+        $response = $this->postJson('/api/fridge/addIngredient', [
+            "fridgeId"=> $user['fridge']->id,
+            "ingredientId" => 1,
+            "quantity" => 150,
+            "unit" => 1,
+        ]);
+        $response->assertStatus(200);
+    } 
+
     public function test_get_fridge()
     {
-        $user = $this->postJson('api/auth/register', [
-            'nickname' => 'Antho',
-            'email' => 'antho@test.com',
-            'password' => 'azertyui'
+     
+        $user = $this->authenticateUser();
+        
+        Sanctum::actingAs($user['user']);
+        // $this->initDataInDatabase();
+        
+        $this->postJson('/api/fridge/addIngredient', [
+            "fridgeId"=> $user['fridge']->id,
+            "ingredientId" => 1,
+            "quantity" => 150,
+            "unit" => 1,
         ]);
 
-
-        $user = new User($user['user']);
-        
-        Sanctum::actingAs($user);
-
         $response = $this->getJson('/api/fridge');
-        $response->assertOk();
-        var_dump($response->content());
+        $response->assertStatus(200);
     }
+
+        // public function test_update_fridge_ingredient()
+    // {
+     
+    //     $user = $this->authenticateUser();
+        
+    //     Sanctum::actingAs($user['user']);
+    //     $this->initDataInDatabase();
+        
+    //     $response = $this->postJson('/api/fridge/updateIngredient', [
+    //         "fridgeId"=> $user['fridge']->id,
+    //         "ingredientId" => 1,
+    //         "quantity" => 250,
+    //         "unit" => 1,
+    //     ]);
+        
+    //     $response->assertStatus(200);
+    // }
 }
