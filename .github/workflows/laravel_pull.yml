@@ -1,7 +1,7 @@
 name: Laravel_build
 
 on:
-  push:
+  pull_request:
     branches: [ "master" ]
 
 jobs:
@@ -17,7 +17,7 @@ jobs:
     - name: Copie .env
       run: php -r "file_exists('.env') || copy('.env.example', '.env');"
     - name: Installation des dependences
-      run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+      run: composer2 install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
     - name: Génération de clé Artisan
       run: php artisan key:generate
     - name: Permission de répertoire
