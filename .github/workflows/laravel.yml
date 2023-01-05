@@ -26,10 +26,10 @@ jobs:
       run: chmod -R 777 storage bootstrap/cache
     - name: Création de la Base
       run: |
-        mkdir -p database
-        touch database/database.sqlite
+        mkdir -p database2
+        touch database2/database.sqlite
     - name: Execution des tests (Unit & Feature tests) via PHPUnit
       env:
         DB_CONNECTION: sqlite
-        DB_DATABASE: database/database.sqlite
+        DB_DATABASE: database2/database.sqlite
       run: vendor/bin/phpunit
