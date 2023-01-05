@@ -15,5 +15,4 @@ class CategorieTest extends TestCase
     {
         $this->assertTrue(true);
     }
-    
 }
